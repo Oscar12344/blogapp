@@ -1,6 +1,8 @@
 package com.example.blogapp.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -15,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.squareup.picasso.Picasso;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -24,8 +27,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 public class Home extends AppCompatActivity {
-   // FirebaseAuth mAuth;
-    //FirebaseUser currentUser ;
+  // FirebaseAuth mAuth;
+  //  FirebaseUser currentUser ;
    FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
     private AppBarConfiguration mAppBarConfiguration;
 
@@ -35,8 +38,8 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home2);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-      //  mAuth = FirebaseAuth.getInstance();
-        //currentUser = mAuth.getCurrentUser();
+      // mAuth = FirebaseAuth.getInstance();
+      //  currentUser = mAuth.getCurrentUser();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,9 +57,10 @@ public class Home extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_profile, R.id.nav_settings)
                 .setDrawerLayout(drawer)
                 .build();
+
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
@@ -68,7 +72,9 @@ public class Home extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
         return true;
+
     }
 
     @Override
@@ -77,6 +83,23 @@ public class Home extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+        if(id==R.id.action_salir)
+        {
+            FirebaseAuth.getInstance().signOut();
+            Intent loginActivity = new Intent(this, LoginActivity.class);
+            startActivity(loginActivity);
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void updateNavHeader() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
